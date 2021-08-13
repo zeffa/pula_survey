@@ -2,8 +2,9 @@ package com.pula.pulasurvey.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.pula.pulasurvey.data.local.entities.Question
 
-@Database(version = PulaSurveyDatabase.DATABASE_VERSION, entities = [])
+@Database(version = PulaSurveyDatabase.DATABASE_VERSION, entities = [Question::class])
 abstract class PulaSurveyDatabase : RoomDatabase() {
     companion object {
         const val DATABASE_VERSION = 1

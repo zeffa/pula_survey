@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pula.pulasurvey">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".PulaSurveyApplication"
         android:allowBackup="false"

@@ -2,6 +2,7 @@ package com.pula.pulasurvey.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,17 +14,15 @@ import com.pula.pulasurvey.ui.screens.WelcomeScreen
 @Composable
 fun AppNavigator() {
     val navController = rememberNavController()
+    val context = LocalContext.current
     NavHost(
         navController = navController,
         startDestination = Screen.Welcome.route
     ) {
         composable(Screen.Welcome.route) {
-            WelcomeScreen()
-//            WelcomeFragment { isAuthenticated ->
-//                val destinationRoute =
-//                    if (isAuthenticated) Screen.Home.route else Screen.Login.route
-//                AppNavigation.navigateTo(navController, destinationRoute, false)
-//            }
+            WelcomeScreen(context) {
+                PulaNavigation.navigateTo(navController, Screen.Survey.route, false)
+            }
         }
 
         composable(Screen.Survey.route) {

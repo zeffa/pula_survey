@@ -20,7 +20,7 @@ data class QuestionEntity(
     val answerType: String,
     @ColumnInfo(name = "next_question_id")
     val nextQuestionId: String,
-){
+)/*{
     @Ignore
     val options: List<OptionEntity> = emptyList()
-}
+}*/

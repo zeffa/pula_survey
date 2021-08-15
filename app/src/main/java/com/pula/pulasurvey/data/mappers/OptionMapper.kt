@@ -20,4 +20,19 @@ class OptionMapperImpl : OptionMapper() {
             fromDTOToEntity(optionDTO)
         }
     }
+
+    override fun fromEntityToModel(entity: OptionEntity): Option {
+        return Option(
+            optionId = entity.optionId?:0,
+            questionId = entity.questionId,
+            displayText = entity.displayText,
+            optionValue = entity.optionValue
+        )
+    }
+
+    override fun entityListToDomainModelList(entityList: List<OptionEntity>): List<Option> {
+        return entityList.map {
+            fromEntityToModel(it)
+        }
+    }
 }

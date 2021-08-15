@@ -14,7 +14,7 @@ import java.lang.Exception
 import java.net.InetSocketAddress
 import java.net.Socket
 
-class NetworkStatusHelper(private val context: Context) : LiveData<NetworkStatus>() {
+class NetworkStatusHelper(context: Context) : LiveData<NetworkStatus>() {
     val validConnections: MutableList<Network> = mutableListOf()
     var connectivityManager: ConnectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

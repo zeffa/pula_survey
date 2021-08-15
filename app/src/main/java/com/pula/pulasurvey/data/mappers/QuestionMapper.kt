@@ -23,4 +23,21 @@ class QuestionMapperImpl : QuestionMapper() {
             fromDTOToEntity(questionDTO)
         }
     }
+
+    override fun fromEntityToModel(entity: QuestionEntity): Question {
+        return Question(
+            questionId = entity.questionId,
+            questionText = entity.questionText,
+            questionType = entity.questionType,
+            answerType = entity.answerType,
+            nextQuestionId = entity.nextQuestionId,
+            options = emptyList()
+        )
+    }
+
+    override fun entityListToDomainModelList(entityList: List<QuestionEntity>): List<Question> {
+        return entityList.map {
+            fromEntityToModel(it)
+        }
+    }
 }

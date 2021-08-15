@@ -6,5 +6,5 @@ data class Question(
     val questionType: String,
     val answerType: String,
     val nextQuestionId: String,
-    val options: List<Option>
+    var options: List<Option>
 )

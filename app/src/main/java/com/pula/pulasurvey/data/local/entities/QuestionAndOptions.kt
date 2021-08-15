@@ -1,19 +1,18 @@
 package com.pula.pulasurvey.data.local.entities
 
-import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Relation
+import com.pula.pulasurvey.ui.models.Question
 
 data class QuestionAndOptions(
-    @ColumnInfo(name = "question_id")
-    val questionId: String,
-    @ColumnInfo(name = "question_text")
-    val questionText: String,
-    @ColumnInfo(name = "question_type")
-    val questionType: String,
-    @ColumnInfo(name = "answer_type")
-    val answerType: String,
-    @ColumnInfo(name = "next_question_id")
-    val nextQuestionId: String,
-    @Relation(parentColumn = "id", entityColumn = "albumId")
+    @Embedded
+    val question: QuestionEntity,
+    @Relation(parentColumn = "question_id", entityColumn = "question_id")
     val options: List<OptionEntity>
-)
+) {
+//    fun mapToQuestionDomain() : Question {
+//        return question.also {
+//
+//        }
+//    }
+}

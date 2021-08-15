@@ -29,7 +29,6 @@ class QuestionDaoTest {
 
     @Before
     fun setup() {
-//        ApplicationProvider.getApplicationContext()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         database = Room.inMemoryDatabaseBuilder(
             appContext,
@@ -57,5 +56,20 @@ class QuestionDaoTest {
         val allQuestions = questionDao.getQuestionList().asLiveData().getOrAwaitValue()
         assertThat(allQuestions[0]).isEqualTo(question)
         assertThat(allQuestions).contains(question)
+    }
+
+    @Test
+    fun isQuestionCountGreaterThanZero() = runBlockingTest {
+        val question = QuestionEntity(
+            "idOne",
+            "surveyId",
+            "question text",
+            "questionType",
+            "answer type",
+            "next"
+        )
+        questionDao.insert(question)
+        val count = questionDao.count().asLiveData().getOrAwaitValue()
+        assertThat(count).isGreaterThan(0)
     }
 }

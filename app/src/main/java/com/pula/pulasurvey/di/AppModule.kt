@@ -1,12 +1,15 @@
 package com.pula.pulasurvey.di
 
+import android.content.Context
 import com.google.gson.GsonBuilder
 import com.pula.pulasurvey.BuildConfig
 import com.pula.pulasurvey.data.remote.PulaSurveyApi
 import com.pula.pulasurvey.utils.Constants
+import com.pula.pulasurvey.utils.NetworkStatusHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -59,5 +62,11 @@ object AppModule {
     @Provides
     fun provideCoroutineIODispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
+    }
+
+    @Singleton
+    @Provides
+    fun provideNetworkHelper(@ApplicationContext context: Context): NetworkStatusHelper {
+        return NetworkStatusHelper(context)
     }
 }

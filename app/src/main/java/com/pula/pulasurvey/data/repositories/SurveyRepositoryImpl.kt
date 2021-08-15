@@ -2,6 +2,7 @@ package com.pula.pulasurvey.data.repositories
 
 import com.pula.pulasurvey.data.datasource.LocalDataSource
 import com.pula.pulasurvey.data.datasource.RemoteDataSource
+import com.pula.pulasurvey.data.local.entities.QuestionAndOptions
 import com.pula.pulasurvey.data.mappers.OptionMapper
 import com.pula.pulasurvey.data.mappers.QuestionMapper
 import com.pula.pulasurvey.data.remote.NetworkResult
@@ -9,7 +10,9 @@ import com.pula.pulasurvey.data.remote.dto.OptionDTO
 import com.pula.pulasurvey.data.remote.dto.QuestionDTO
 import com.pula.pulasurvey.data.remote.dto.StringDataDTO
 import com.pula.pulasurvey.data.remote.dto.SurveyDTO
+import com.pula.pulasurvey.ui.models.Question
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class SurveyRepositoryImpl(
@@ -22,8 +25,8 @@ class SurveyRepositoryImpl(
         return remoteDataSource.fetchSurveyFromApi()
     }
 
-    override suspend fun fetchSurveyFromDb() {
-        TODO("Not yet implemented")
+    override suspend fun fetchSurveyFromDb(): Flow<List<QuestionAndOptions>> {
+        return localDataSource.fetchQuestionsAndOptionFromDb()
     }
 
     override suspend fun saveSurvey(surveyDTO: SurveyDTO) {
@@ -47,10 +50,27 @@ class SurveyRepositoryImpl(
 
     }
 
-    override suspend fun getStartQuestion() : String {
-        return withContext(Dispatchers.IO){
+    override suspend fun getStartQuestion(): String {
+        return withContext(Dispatchers.IO) {
             localDataSource.getStartQuestion()
         }
+    }
+
+    override suspend fun isSurveySavedLocally(): Boolean {
+        return localDataSource.checkIfSurveySavedInDb()
+    }
+
+    override suspend fun formatToQuestionDomain(questions: List<QuestionAndOptions>): List<Question> {
+        val questionsList = mutableListOf<Question>()
+        questions.forEach { quizOptions ->
+            val question = questionMapper.fromEntityToModel(quizOptions.question).also {
+                it?.options = optionMapper.entityListToDomainModelList(quizOptions.options)
+            }
+            if (question != null) {
+                questionsList.add(question)
+            }
+        }
+        return questionsList
     }
 
     private fun mapToQuestion(

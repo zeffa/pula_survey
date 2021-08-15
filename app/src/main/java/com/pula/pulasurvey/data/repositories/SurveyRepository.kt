@@ -7,4 +7,5 @@ interface SurveyRepository {
     suspend fun fetchSurveyFromRemote() : NetworkResult<SurveyDTO>
     suspend fun fetchSurveyFromDb()
     suspend fun saveSurvey(surveyDTO: SurveyDTO)
+    suspend fun getStartQuestion() : String
 }

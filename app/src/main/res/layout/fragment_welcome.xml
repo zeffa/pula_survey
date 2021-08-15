@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/size_16_dp"
+    tools:context=".ui.welcome.WelcomeFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/top_guide"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_01_dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <TextView
+        android:id="@+id/txtPula"
+        android:layout_width="@dimen/size_0_dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textSize="@dimen/size_32_sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/top_guide" />
+
+    <TextView
+        android:id="@+id/txtWelcomeText"
+        android:layout_width="@dimen/size_0_dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:text="@string/welcome"
+        android:textSize="@dimen/size_20_sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_guide" />
+
+    <TextView
+        android:id="@+id/txtWelcomeMessage"
+        android:layout_width="@dimen/size_0_dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_32_dp"
+        android:gravity="center"
+        android:text="@string/why_survey"
+        android:textSize="@dimen/size_16_sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtWelcomeText" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnStartSurvey"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="@dimen/size_0_dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_16_dp"
+        android:text="@string/start_survey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/pula_dark_blue" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

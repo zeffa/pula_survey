@@ -9,6 +9,8 @@ import com.pula.pulasurvey.data.remote.dto.OptionDTO
 import com.pula.pulasurvey.data.remote.dto.QuestionDTO
 import com.pula.pulasurvey.data.remote.dto.StringDataDTO
 import com.pula.pulasurvey.data.remote.dto.SurveyDTO
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class SurveyRepositoryImpl(
     private val localDataSource: LocalDataSource,
@@ -43,6 +45,12 @@ class SurveyRepositoryImpl(
 
         localDataSource.commit(surveyDTO.startQuestionId, questionEntities, optionEntities)
 
+    }
+
+    override suspend fun getStartQuestion() : String {
+        return withContext(Dispatchers.IO){
+            localDataSource.getStartQuestion()
+        }
     }
 
     private fun mapToQuestion(

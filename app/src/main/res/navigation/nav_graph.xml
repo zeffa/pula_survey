@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.pula.pulasurvey.ui.welcome.WelcomeFragment"
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/action_welcomeFragment_to_conductSurveyFragment"
+            app:destination="@id/conductSurveyFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/conductSurveyFragment"
+        android:name="com.pula.pulasurvey.ui.survey.ConductSurveyFragment"
+        tools:layout="@layout/conduct_survey">
+        <action
+            android:id="@+id/action_conductSurveyFragment2_to_welcomeFragment"
+            app:destination="@id/welcomeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/conductSurveyFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

@@ -5,10 +5,12 @@ import com.pula.pulasurvey.data.local.entities.OptionEntity
 import com.pula.pulasurvey.data.local.entities.QuestionEntity
 import com.pula.pulasurvey.data.local.preferences.QuestionDataStore
 import com.pula.pulasurvey.data.remote.dto.SurveyDTO
+import kotlinx.coroutines.flow.first
 
 interface LocalDataSource {
     suspend fun saveStartQuestionToPreference(startQnId: String)
     suspend fun saveSurveyData(survey: SurveyDTO)
+    suspend fun getStartQuestion() : String
     suspend fun commit(startQn: String, questions: List<QuestionEntity>, options: List<OptionEntity>)
 }
 
@@ -22,6 +24,10 @@ class LocalDataSourceImpl(
 
     override suspend fun saveSurveyData(survey: SurveyDTO) {
         TODO("Not Implemented")
+    }
+
+    override suspend fun getStartQuestion(): String {
+        return dataStore.getStartQuestion().first()
     }
 
     override suspend fun commit(startQn: String, questions: List<QuestionEntity>, options: List<OptionEntity>) {

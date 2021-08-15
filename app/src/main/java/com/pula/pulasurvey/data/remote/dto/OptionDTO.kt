@@ -6,5 +6,6 @@ data class OptionDTO(
     @SerializedName("value")
     val value: String,
     @SerializedName("display_text")
-    val displayText: String
+    val displayText: String,
+    var questionId: String? = null
 )

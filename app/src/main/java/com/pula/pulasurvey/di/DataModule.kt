@@ -1,7 +1,11 @@
 package com.pula.pulasurvey.di
 
 import com.pula.pulasurvey.data.datasource.LocalDataSource
+import com.pula.pulasurvey.data.datasource.LocalDataSourceImpl
 import com.pula.pulasurvey.data.datasource.RemoteDataSource
+import com.pula.pulasurvey.data.local.PulaSurveyDatabase
+import com.pula.pulasurvey.data.mappers.OptionMapper
+import com.pula.pulasurvey.data.mappers.QuestionMapper
 import com.pula.pulasurvey.data.remote.NetworkHelper
 import com.pula.pulasurvey.data.remote.PulaSurveyApi
 import com.pula.pulasurvey.data.repositories.SurveyRepository
@@ -19,15 +23,17 @@ object DataModule {
     @Provides
     fun provideSurveyRepository(
         localDataSource: LocalDataSource,
-        remoteDataSource: RemoteDataSource
+        remoteDataSource: RemoteDataSource,
+        questionMapper: QuestionMapper,
+        optionMapper: OptionMapper
     ): SurveyRepository {
-        return SurveyRepositoryImpl(localDataSource, remoteDataSource)
+        return SurveyRepositoryImpl(localDataSource, remoteDataSource, questionMapper, optionMapper)
     }
 
     @Singleton
     @Provides
-    fun provideLocalDataSource(): LocalDataSource {
-        return LocalDataSource()
+    fun provideLocalDataSource(database: PulaSurveyDatabase): LocalDataSource {
+        return LocalDataSourceImpl(database)
     }
 
     @Singleton

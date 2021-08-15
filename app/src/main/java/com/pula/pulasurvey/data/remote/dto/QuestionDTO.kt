@@ -10,9 +10,10 @@ data class QuestionDTO(
     @SerializedName("answer_type")
     val answerType: String,
     @SerializedName("question_text")
-    val questionText: String,
+    var questionText: String,
     @SerializedName("options")
     val options: List<OptionDTO>? = listOf(),
     @SerializedName("next")
-    val nextQuestion: String
+    val nextQuestion: String? = null,
+    var surveyId: String? = null
 )

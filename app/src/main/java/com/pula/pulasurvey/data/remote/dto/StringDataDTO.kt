@@ -15,4 +15,15 @@ data class StringDataDTO(
     val optOther: String,
     @SerializedName("q_size_of_farm")
     val qSizeOfFarm: String
-)
+) {
+    fun convertToMap(): Map<String, Any> {
+        return hashMapOf(
+            "q_farmer_name" to qFarmerName,
+            "q_farmer_gender" to qFarmerGender,
+            "q_size_of_farm" to qSizeOfFarm,
+            "opt_male" to optMale,
+            "opt_female" to optFemale,
+            "opt_other" to optOther
+        )
+    }
+}

@@ -24,6 +24,7 @@ class SurveyViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             when (val response = surveyRepository.fetchSurveyFromRemote()) {
                 is NetworkResult.Success -> {
+                    surveyRepository.saveSurvey(response.value)
                     _surveyState?.postValue(SurveyState.FETCHED(response.value))
                     Log.d("RESPONSE_FROM_API", response.value.toString())
                 }

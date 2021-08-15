@@ -1,9 +1,12 @@
 package com.pula.pulasurvey.di
 
+import android.content.Context
 import com.pula.pulasurvey.data.datasource.LocalDataSource
 import com.pula.pulasurvey.data.datasource.LocalDataSourceImpl
 import com.pula.pulasurvey.data.datasource.RemoteDataSource
 import com.pula.pulasurvey.data.local.PulaSurveyDatabase
+import com.pula.pulasurvey.data.local.preferences.QuestionDataStore
+import com.pula.pulasurvey.data.local.preferences.QuestionDataStoreImpl
 import com.pula.pulasurvey.data.mappers.OptionMapper
 import com.pula.pulasurvey.data.mappers.QuestionMapper
 import com.pula.pulasurvey.data.remote.NetworkHelper
@@ -13,6 +16,7 @@ import com.pula.pulasurvey.data.repositories.SurveyRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -32,8 +36,11 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideLocalDataSource(database: PulaSurveyDatabase): LocalDataSource {
-        return LocalDataSourceImpl(database)
+    fun provideLocalDataSource(
+        database: PulaSurveyDatabase,
+        dataStore: QuestionDataStore
+    ): LocalDataSource {
+        return LocalDataSourceImpl(database, dataStore)
     }
 
     @Singleton
@@ -45,4 +52,11 @@ object DataModule {
         return RemoteDataSource(api, networkHelper)
     }
 
+    @Singleton
+    @Provides
+    fun provideQuestionDatastore(
+        @ApplicationContext context: Context
+    ): QuestionDataStore {
+        return QuestionDataStoreImpl(context)
+    }
 }

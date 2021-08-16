@@ -1,5 +1,6 @@
 package com.pula.pulasurvey.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -39,7 +40,7 @@ fun SurveyScreen(
 ) {
     val viewModel: SurveyViewModel = hiltViewModel()
     val state = viewModel.surveyResource.observeAsState()
-//    val isCompleteState = viewModel.surveyComplete.observeAsState()
+    Log.d("STATE_FROM_REPO", state.value.toString())
     val currentQuestion = viewModel.currentQuestionActive.observeAsState()
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -72,9 +73,6 @@ fun SurveyScreen(
                             )
                             viewModel.saveSurveyResponse()
                             onFinish()
-//                            if (isCompleteState.value == true) {
-//                                onFinish()
-//                            }
                         }
                     )
                 }

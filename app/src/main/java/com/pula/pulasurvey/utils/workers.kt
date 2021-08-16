@@ -1,21 +1,23 @@
 package com.pula.pulasurvey.utils
 
 import android.content.Context
-import androidx.work.Worker
+import androidx.hilt.work.HiltWorker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.pula.pulasurvey.data.repositories.SurveyRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class SendSurveyResponseToServer @Inject constructor(
+@HiltWorker
+class SendSurveyResponseToServer @AssistedInject constructor(
     private val repository: SurveyRepository,
-    appContext: Context,
-    workerParams: WorkerParameters
-) :
-    Worker(appContext, workerParams) {
-    override fun doWork(): Result {
+    @Assisted appContext: Context,
+    @Assisted workerParams: WorkerParameters
+) : CoroutineWorker(appContext, workerParams) {
+    override suspend fun doWork(): Result {
         return try {
             sendSurveyToServer(repository)
             Result.success()

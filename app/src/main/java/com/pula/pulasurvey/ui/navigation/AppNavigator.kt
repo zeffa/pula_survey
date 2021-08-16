@@ -4,15 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pula.pulasurvey.ui.SurveyViewModel
 import com.pula.pulasurvey.ui.screens.SurveyScreen
 import com.pula.pulasurvey.ui.screens.WelcomeScreen
 
 @ExperimentalComposeUiApi
 @Composable
-fun AppNavigator() {
+fun AppNavigator(viewModel: SurveyViewModel) {
     val navController = rememberNavController()
     val context = LocalContext.current
     NavHost(
@@ -37,5 +39,5 @@ fun AppNavigator() {
 @Preview
 @Composable
 fun NavPreview() {
-    AppNavigator()
+    AppNavigator(hiltViewModel())
 }

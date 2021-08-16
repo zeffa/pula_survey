@@ -1,5 +1,6 @@
 package com.pula.pulasurvey.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,12 +28,10 @@ class SurveyViewModel @Inject constructor(
 ) : ViewModel() {
     private var answersList = mutableListOf<CompletedSurvey>()
 
-    //    private var _surveyComplete: MutableLiveData<Boolean> = MutableLiveData(false)
     private var _surveyResource: MutableLiveData<SurveyResource> = MutableLiveData()
     private var _surveyQuestions: MutableLiveData<List<Question>> = MutableLiveData()
     val surveyResource: LiveData<SurveyResource> get() = _surveyResource
     val surveyQuestions: LiveData<List<Question>> get() = _surveyQuestions
-//    val surveyComplete: LiveData<Boolean> get() = _surveyComplete
 
     private var _currentQuestion: MutableLiveData<Question> = MutableLiveData()
     val currentQuestionActive: LiveData<Question> get() = _currentQuestion
@@ -94,6 +93,7 @@ class SurveyViewModel @Inject constructor(
     }
 
     fun fetchSurveyQuestions() {
+        Log.d("OnResumeCall", "Yes am called, nigga")
         viewModelScope.launch {
             _surveyResource.value = SurveyResource.Loading
             when (surveyRepository.isSurveySavedLocally()) {
@@ -139,9 +139,7 @@ class SurveyViewModel @Inject constructor(
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresBatteryNotLow(true)
             .build()
-        val worker = PeriodicWorkRequestBuilder<SendSurveyResponseToServer>(
-            15, TimeUnit.MINUTES
-        )
+        val worker = PeriodicWorkRequestBuilder<SendSurveyResponseToServer>(15, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .addTag("surveyUpload")
             .build()

@@ -4,14 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.WorkManager
-import com.pula.pulasurvey.databinding.ActivityMainBinding
 import com.pula.pulasurvey.ui.SurveyViewModel
 import com.pula.pulasurvey.ui.navigation.AppNavigator
 import com.pula.pulasurvey.ui.theme.PulaSurveyTheme
@@ -19,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val viewModel: SurveyViewModel by viewModels()
+    private val viewModel: SurveyViewModel by viewModels()
     private val workManager by lazy {
         WorkManager.getInstance(applicationContext)
     }
@@ -30,10 +26,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             PulaSurveyTheme {
                 Surface(color = MaterialTheme.colors.surface) {
-                    AppNavigator()
+                    AppNavigator(viewModel = viewModel)
                 }
             }
         }
-        viewModel.createPeriodWorker(workManager)
+//        viewModel.fetchSurveyQuestions()
+        viewModel.createPeriodWorker(WorkManager.getInstance(applicationContext))
     }
 }

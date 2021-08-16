@@ -1,6 +1,5 @@
 package com.pula.pulasurvey.ui
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -15,6 +14,7 @@ import com.pula.pulasurvey.ui.state.SurveyResource
 import com.pula.pulasurvey.utils.NetworkStatus
 import com.pula.pulasurvey.utils.NetworkStatusHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -26,12 +26,12 @@ class SurveyViewModel @Inject constructor(
     private val networkStatusHelper: NetworkStatusHelper
 ) : ViewModel() {
     private var answersList = mutableListOf<CompletedSurvey>()
-    private var _surveyComplete: MutableLiveData<Boolean> = MutableLiveData(false)
-    private var _surveyResource = mutableStateOf<SurveyResource>(SurveyResource.Initial)
+//    private var _surveyComplete: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var _surveyResource: MutableLiveData<SurveyResource> = MutableLiveData()
     private var _surveyQuestions: MutableLiveData<List<Question>> = MutableLiveData()
-    val surveyResource: State<SurveyResource> get() = _surveyResource
+    val surveyResource: LiveData<SurveyResource> get() = _surveyResource
     val surveyQuestions: LiveData<List<Question>> get() = _surveyQuestions
-    val surveyComplete: LiveData<Boolean> get() = _surveyComplete
+//    val surveyComplete: LiveData<Boolean> get() = _surveyComplete
 
     private var _currentQuestion: MutableLiveData<Question> = MutableLiveData()
     val currentQuestionActive: LiveData<Question> get() = _currentQuestion
@@ -52,11 +52,13 @@ class SurveyViewModel @Inject constructor(
         viewModelScope.launch {
             when (val response = surveyRepository.fetchSurveyFromRemote()) {
                 is NetworkResult.Success -> {
-                    surveyRepository.saveSurvey(response.value)
+                    if (!surveyRepository.isSurveySavedLocally()) {
+                        surveyRepository.saveSurvey(response.value)
+                    }
                     collectQuestions()
                 }
                 is NetworkResult.NetworkError -> {
-                    _surveyResource.value = (SurveyResource.LoadingFailed(response.error.message))
+                    _surveyResource.value = SurveyResource.LoadingFailed(response.error.message)
                 }
                 is NetworkResult.ServerError -> {
                     _surveyResource.value = response.error?.message?.let {
@@ -76,7 +78,7 @@ class SurveyViewModel @Inject constructor(
                 getSurveyFromServer()
             }
             NetworkStatus.Disconnected -> _surveyResource.value =
-                (SurveyResource.InternetUnavailable)
+                SurveyResource.InternetUnavailable
         }
     }
 
@@ -92,7 +94,7 @@ class SurveyViewModel @Inject constructor(
 
     fun fetchSurveyQuestions() {
         viewModelScope.launch {
-            _surveyResource.value = (SurveyResource.Loading)
+            _surveyResource.value = SurveyResource.Loading
             when (surveyRepository.isSurveySavedLocally()) {
                 true -> collectQuestions()
                 else -> {
@@ -105,7 +107,7 @@ class SurveyViewModel @Inject constructor(
     private suspend fun collectQuestions() {
         surveyRepository.fetchSurveyFromDb().collect { questionOptions ->
             val questions = surveyRepository.formatToQuestionDomain(questionOptions)
-            _surveyResource.value = (SurveyResource.LoadingSuccess(questions))
+            _surveyResource.value = SurveyResource.LoadingSuccess(questions)
             _surveyQuestions.value = questions
             _currentQuestion.value = questions.find {
                 it.questionId == getStartQuestionId()
@@ -127,8 +129,7 @@ class SurveyViewModel @Inject constructor(
 
     fun saveSurveyResponse() {
         viewModelScope.launch {
-            val response = surveyRepository.saveSurveyResponse(answersList)
-            _surveyComplete.value = response.isNotEmpty()
+            surveyRepository.saveSurveyResponse(answersList)
         }
     }
 }

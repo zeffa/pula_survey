@@ -38,12 +38,11 @@ fun SurveyScreen(
     onFinish: () -> Unit
 ) {
     val viewModel: SurveyViewModel = hiltViewModel()
-    val state = viewModel.surveyResource
-    val isCompleteState = viewModel.surveyComplete.observeAsState()
+    val state = viewModel.surveyResource.observeAsState()
+//    val isCompleteState = viewModel.surveyComplete.observeAsState()
     val currentQuestion = viewModel.currentQuestionActive.observeAsState()
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -72,9 +71,10 @@ fun SurveyScreen(
                                 answer
                             )
                             viewModel.saveSurveyResponse()
-                            if (isCompleteState.value == true) {
-                                onFinish()
-                            }
+                            onFinish()
+//                            if (isCompleteState.value == true) {
+//                                onFinish()
+//                            }
                         }
                     )
                 }

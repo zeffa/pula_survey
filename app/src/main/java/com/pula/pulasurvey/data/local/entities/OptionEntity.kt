@@ -2,9 +2,13 @@ package com.pula.pulasurvey.data.local.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "options")
+@Entity(
+    tableName = "options",
+    indices = [Index(value = ["display_text", "option_value"], unique = true)]
+)
 data class OptionEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

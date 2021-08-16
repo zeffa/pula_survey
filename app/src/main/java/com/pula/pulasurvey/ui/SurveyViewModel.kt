@@ -27,17 +27,11 @@ class SurveyViewModel @Inject constructor(
 ) : ViewModel() {
     private var answersList = mutableListOf<CompletedSurvey>()
 
-    private var _surveyResource: MutableLiveData<SurveyResource> = MutableLiveData()
     private var _surveyQuestions: MutableLiveData<List<Question>> = MutableLiveData()
+
+    private var _surveyResource: MutableLiveData<SurveyResource> = MutableLiveData()
+
     val surveyResource: LiveData<SurveyResource> get() = _surveyResource
-
-    private var _currentQuestion: MutableLiveData<Question> = MutableLiveData()
-    val currentQuestionActive: LiveData<Question> get() = _currentQuestion
-
-    init {
-        fetchSurveyQuestions()
-    }
-
     private fun fetchSurveyFromApi() {
         viewModelScope.launch {
             networkStatusHelper.observeForever {
@@ -50,6 +44,7 @@ class SurveyViewModel @Inject constructor(
         viewModelScope.launch {
             when (val response = surveyRepository.fetchSurveyFromRemote()) {
                 is NetworkResult.Success -> {
+                    surveyRepository.saveStartQuestionId(response.value.startQuestionId)
                     if (!surveyRepository.isSurveySavedLocally()) {
                         surveyRepository.saveSurvey(response.value)
                     }
@@ -101,19 +96,22 @@ class SurveyViewModel @Inject constructor(
     private suspend fun collectQuestions() {
         surveyRepository.fetchSurveyFromDb().collect { questionOptions ->
             val questions = surveyRepository.formatToQuestionDomain(questionOptions)
-            _surveyResource.value = SurveyResource.LoadingSuccess(questions)
             _surveyQuestions.value = questions
-            _currentQuestion.value = questions.find {
-                it.questionId == getStartQuestionId()
-            }
+            setQuestionsLiveData(questions)
         }
+    }
+
+    private fun setQuestionsLiveData(questions: List<Question>) {
+        _surveyResource.value = questions.find {
+            it.questionId == getStartQuestionId()
+        }?.let { SurveyResource.LoadingSuccess(it) }
     }
 
     fun setNextQuestionId(nextQuestionId: String) {
         viewModelScope.launch {
-            _currentQuestion.value = _surveyQuestions.value?.find {
+            _surveyResource.value = SurveyResource.LoadingSuccess(_surveyQuestions.value?.find {
                 it.questionId == nextQuestionId
-            }
+            }!!)
         }
     }
 

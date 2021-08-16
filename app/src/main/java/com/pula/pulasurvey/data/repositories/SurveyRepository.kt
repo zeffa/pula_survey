@@ -16,4 +16,5 @@ interface SurveyRepository {
     suspend fun formatToQuestionDomain(questions: List<QuestionAndOptions>): List<Question>
     suspend fun saveSurveyResponse(answersList: MutableList<CompletedSurvey>): List<Long>
     suspend fun sendResponseToServer()
+    suspend fun saveStartQuestionId(startQnId: String)
 }

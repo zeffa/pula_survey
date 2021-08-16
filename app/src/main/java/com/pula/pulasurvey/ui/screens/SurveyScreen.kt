@@ -1,6 +1,5 @@
 package com.pula.pulasurvey.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -39,8 +38,6 @@ fun SurveyScreen(
     onFinish: () -> Unit
 ) {
     val viewModel: SurveyViewModel = hiltViewModel()
-    val state = viewModel.surveyResource.observeAsState()
-    Log.d("STATE_FROM_REPO", state.value.toString())
     val currentQuestion = viewModel.currentQuestionActive.observeAsState()
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -48,35 +45,37 @@ fun SurveyScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            when (val value = state.value) {
-                is SurveyResource.Loading -> {
-                    CircularProgressIndicator()
-                }
-                is SurveyResource.LoadingFailed -> {
-                    Text(text = value.error)
-                }
-                is SurveyResource.LoadingSuccess -> {
-                    SurveyUI(
-                        currentQuestion.value,
-                        onNext = { nextQnId, currentQnId, answer ->
-                            run {
-                                viewModel.setNextQuestionId(nextQnId)
+            viewModel.surveyResource.observeAsState(initial = SurveyResource.Loading).value.let { state ->
+                when (state) {
+                    is SurveyResource.Loading -> {
+                        viewModel.fetchSurveyQuestions()
+                    }
+                    is SurveyResource.LoadingFailed -> {
+                        Text(text = state.error)
+                    }
+                    is SurveyResource.LoadingSuccess -> {
+                        SurveyUI(
+                            currentQuestion.value,
+                            onNext = { nextQnId, currentQnId, answer ->
+                                run {
+                                    viewModel.setNextQuestionId(nextQnId)
+                                    viewModel.setQuestionResponse(
+                                        currentQnId,
+                                        answer
+                                    )
+                                }
+                            }, onDone = { currentQnId, answer ->
                                 viewModel.setQuestionResponse(
                                     currentQnId,
                                     answer
                                 )
+                                viewModel.saveSurveyResponse()
+                                onFinish()
                             }
-                        }, onDone = { currentQnId, answer ->
-                            viewModel.setQuestionResponse(
-                                currentQnId,
-                                answer
-                            )
-                            viewModel.saveSurveyResponse()
-                            onFinish()
-                        }
-                    )
+                        )
+                    }
+                    else -> Box(modifier = Modifier)
                 }
-                else -> Box(modifier = Modifier)
             }
         }
     }

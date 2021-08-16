@@ -1,6 +1,5 @@
 package com.pula.pulasurvey.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,7 +30,6 @@ class SurveyViewModel @Inject constructor(
     private var _surveyResource: MutableLiveData<SurveyResource> = MutableLiveData()
     private var _surveyQuestions: MutableLiveData<List<Question>> = MutableLiveData()
     val surveyResource: LiveData<SurveyResource> get() = _surveyResource
-    val surveyQuestions: LiveData<List<Question>> get() = _surveyQuestions
 
     private var _currentQuestion: MutableLiveData<Question> = MutableLiveData()
     val currentQuestionActive: LiveData<Question> get() = _currentQuestion
@@ -88,12 +86,7 @@ class SurveyViewModel @Inject constructor(
         }
     }
 
-    val startQuestion = _surveyQuestions.value?.find {
-        it.questionId == getStartQuestionId()
-    }
-
     fun fetchSurveyQuestions() {
-        Log.d("OnResumeCall", "Yes am called, nigga")
         viewModelScope.launch {
             _surveyResource.value = SurveyResource.Loading
             when (surveyRepository.isSurveySavedLocally()) {

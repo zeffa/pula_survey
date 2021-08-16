@@ -96,6 +96,9 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
+    //Worker manager
+    implementation("androidx.work:work-runtime-ktx:$worker_version")
+
     //Db inspection
     implementation "com.facebook.stetho:stetho:1.6.0"
 

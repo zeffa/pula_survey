@@ -4,6 +4,7 @@ import android.content.Context
 import com.pula.pulasurvey.data.datasource.LocalDataSource
 import com.pula.pulasurvey.data.datasource.LocalDataSourceImpl
 import com.pula.pulasurvey.data.datasource.RemoteDataSource
+import com.pula.pulasurvey.data.datasource.RemoteDataSourceImpl
 import com.pula.pulasurvey.data.local.PulaSurveyDatabase
 import com.pula.pulasurvey.data.local.preferences.QuestionDataStore
 import com.pula.pulasurvey.data.local.preferences.QuestionDataStoreImpl
@@ -57,7 +58,7 @@ object DataModule {
         api: PulaSurveyApi,
         networkHelper: NetworkHelper
     ): RemoteDataSource {
-        return RemoteDataSource(api, networkHelper)
+        return RemoteDataSourceImpl(api, networkHelper)
     }
 
     @Singleton

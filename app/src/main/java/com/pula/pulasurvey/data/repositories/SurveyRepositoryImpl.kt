@@ -7,10 +7,7 @@ import com.pula.pulasurvey.data.mappers.OptionMapper
 import com.pula.pulasurvey.data.mappers.QuestionMapper
 import com.pula.pulasurvey.data.mappers.SurveyResponseMapper
 import com.pula.pulasurvey.data.remote.NetworkResult
-import com.pula.pulasurvey.data.remote.dto.OptionDTO
-import com.pula.pulasurvey.data.remote.dto.QuestionDTO
-import com.pula.pulasurvey.data.remote.dto.StringDataDTO
-import com.pula.pulasurvey.data.remote.dto.SurveyDTO
+import com.pula.pulasurvey.data.remote.dto.*
 import com.pula.pulasurvey.ui.models.CompletedSurvey
 import com.pula.pulasurvey.ui.models.Question
 import kotlinx.coroutines.Dispatchers
@@ -83,24 +80,12 @@ class SurveyRepositoryImpl(
         return localDataSource.insertSurveyResponseToDb(responseEntities)
     }
 
-    private fun mapToQuestion(
-        currentDTO: QuestionDTO,
-        stringDataDTO: StringDataDTO,
-        surveyId: String
-    ): QuestionDTO {
-        val stringsMap = stringDataDTO.convertToMap()
-        val questionText = stringsMap[currentDTO.questionText].toString()
-        return currentDTO.copy(surveyId = surveyId, questionText = questionText)
-    }
-
-    private fun mapToOption(
-        currentDTO: OptionDTO,
-        stringDataDTO: StringDataDTO,
-        questionId: String
-    ): OptionDTO {
-        val stringsMap = stringDataDTO.convertToMap()
-        val optionText = stringsMap[currentDTO.displayText].toString()
-        return currentDTO.copy(questionId = questionId, displayText = optionText)
+    override suspend fun sendResponseToServer() {
+        val entities = localDataSource.getPendingResponsesFromDb().map {
+            responseMapper.fromEntityToDTO(it)!!
+        }
+        remoteDataSource.sendSurvey(entities)
+        localDataSource.clearResponses()
     }
 
     private fun mapQuestionText(currentDTO: QuestionDTO, stringDataDTO: StringDataDTO): String {

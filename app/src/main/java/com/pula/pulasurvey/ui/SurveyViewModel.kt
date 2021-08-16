@@ -1,11 +1,10 @@
 package com.pula.pulasurvey.ui
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.*
 import com.pula.pulasurvey.data.remote.NetworkResult
 import com.pula.pulasurvey.data.repositories.SurveyRepository
 import com.pula.pulasurvey.ui.models.CompletedSurvey
@@ -13,11 +12,12 @@ import com.pula.pulasurvey.ui.models.Question
 import com.pula.pulasurvey.ui.state.SurveyResource
 import com.pula.pulasurvey.utils.NetworkStatus
 import com.pula.pulasurvey.utils.NetworkStatusHelper
+import com.pula.pulasurvey.utils.SendSurveyResponseToServer
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +26,8 @@ class SurveyViewModel @Inject constructor(
     private val networkStatusHelper: NetworkStatusHelper
 ) : ViewModel() {
     private var answersList = mutableListOf<CompletedSurvey>()
-//    private var _surveyComplete: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    //    private var _surveyComplete: MutableLiveData<Boolean> = MutableLiveData(false)
     private var _surveyResource: MutableLiveData<SurveyResource> = MutableLiveData()
     private var _surveyQuestions: MutableLiveData<List<Question>> = MutableLiveData()
     val surveyResource: LiveData<SurveyResource> get() = _surveyResource
@@ -131,5 +132,23 @@ class SurveyViewModel @Inject constructor(
         viewModelScope.launch {
             surveyRepository.saveSurveyResponse(answersList)
         }
+    }
+
+    fun createPeriodWorker(workManager: WorkManager) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+        val worker = PeriodicWorkRequestBuilder<SendSurveyResponseToServer>(
+            15, TimeUnit.MINUTES
+        )
+            .setConstraints(constraints)
+            .addTag("surveyUpload")
+            .build()
+        workManager.enqueueUniquePeriodicWork(
+            "periodicSurveyUpload",
+            ExistingPeriodicWorkPolicy.KEEP,
+            worker
+        )
     }
 }

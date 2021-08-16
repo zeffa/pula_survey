@@ -4,6 +4,7 @@ abstract class SurveyDataMapper<DTO, DomainModel, Entity> {
     open fun fromDTOToModel(dto: DTO): DomainModel? = null
     open fun fromModelToDTO(domainModel: DomainModel): DTO? = null
     open fun fromEntityToModel(entity: Entity): DomainModel? = null
+    open fun fromEntityToDTO(entity: Entity): DTO? = null
     open fun fromModelToEntity(domainModel: DomainModel): Entity? = null
     open fun fromDTOToEntity(dto: DTO): Entity? = null
     open fun entityListToDomainModelList(entityList: List<Entity>): List<DomainModel> = emptyList()

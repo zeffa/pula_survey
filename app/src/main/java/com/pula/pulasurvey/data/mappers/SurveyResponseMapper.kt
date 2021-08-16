@@ -14,4 +14,11 @@ class SurveyResponseMapperImpl : SurveyResponseMapper() {
             answer = domainModel.answer
         )
     }
+
+    override fun fromEntityToDTO(entity: CompletedSurveyEntity): SurveyResponseDTO {
+        return SurveyResponseDTO(
+            questionId = entity.questionId,
+            answer = entity.answer
+        )
+    }
 }

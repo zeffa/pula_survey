@@ -30,7 +30,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-//        viewModel.fetchSurveyQuestions()
-        viewModel.createPeriodWorker(WorkManager.getInstance(applicationContext))
+        viewModel.createPeriodWorker(workManager)
     }
 }

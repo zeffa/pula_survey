@@ -30,11 +30,8 @@ class SurveyViewModel @Inject constructor(
     private var _surveyQuestions: MutableLiveData<List<Question>> = MutableLiveData()
 
     private var _surveyResource: MutableLiveData<SurveyResource> = MutableLiveData()
-    private var _currentQuestion: MutableLiveData<Question> = MutableLiveData()
 
     val surveyResource: LiveData<SurveyResource> get() = _surveyResource
-    val currentQuestionActive: LiveData<Question> get() = _currentQuestion
-
     private fun fetchSurveyFromApi() {
         viewModelScope.launch {
             networkStatusHelper.observeForever {
@@ -99,29 +96,22 @@ class SurveyViewModel @Inject constructor(
     private suspend fun collectQuestions() {
         surveyRepository.fetchSurveyFromDb().collect { questionOptions ->
             val questions = surveyRepository.formatToQuestionDomain(questionOptions)
-            _surveyResource.value = SurveyResource.LoadingSuccess(questions)
             _surveyQuestions.value = questions
             setQuestionsLiveData(questions)
         }
     }
 
     private fun setQuestionsLiveData(questions: List<Question>) {
-        _currentQuestion.value = questions.find {
+        _surveyResource.value = questions.find {
             it.questionId == getStartQuestionId()
-        }
-    }
-
-    fun getCurrentQuestion(questions: List<Question>): Question? {
-        return questions.find {
-            it.questionId == getStartQuestionId()
-        }
+        }?.let { SurveyResource.LoadingSuccess(it) }
     }
 
     fun setNextQuestionId(nextQuestionId: String) {
         viewModelScope.launch {
-            _currentQuestion.value = _surveyQuestions.value?.find {
+            _surveyResource.value = SurveyResource.LoadingSuccess(_surveyQuestions.value?.find {
                 it.questionId == nextQuestionId
-            }
+            }!!)
         }
     }
 

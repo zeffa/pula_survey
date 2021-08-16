@@ -54,56 +54,28 @@ fun SurveyScreen(
                         Text(text = state.error)
                     }
                     is SurveyResource.LoadingSuccess -> {
-//                        val currentQuestion = viewModel.getQuestionCurrentQuestion(state.questions)
-//                        viewModel.setQuestionsLiveData(state.questions)
-//                        Log.d("QUESTION_ID_SUCCESS", "Could I be called again")
-//                        val currentQuestion = viewModel.getCurrentQuestion(state.questions)
-//                        Log.d("UI_STATE_UPDATE", state.questions.toString())
-//                        Log.d("UI_STATE_UPDATE_SQN", viewModel.getStartQuestionId())
-//                        Log.d("UI_STATE_UPDATE", viewModel.getCurrentQuestion(state.questions).toString())
-//                        SurveyUI(
-//                            currentQuestion,
-//                            onNext = { nextQnId, currentQnId, answer ->
-//                                run {
-//                                    viewModel.setNextQuestionId(nextQnId)
-//                                    viewModel.setQuestionResponse(
-//                                        currentQnId,
-//                                        answer
-//                                    )
-//                                }
-//                            }, onDone = { currentQnId, answer ->
-//                                viewModel.setQuestionResponse(
-//                                    currentQnId,
-//                                    answer
-//                                )
-//                                viewModel.saveSurveyResponse()
-//                                onFinish()
-//                            }
-//                        )
-                    }
-                    else -> Box(modifier = Modifier)
-                }
-            }
-            viewModel.currentQuestionActive.observeAsState().value?.let { currentQuestion ->
-                SurveyUI(
-                    currentQuestion,
-                    onNext = { nextQnId, currentQnId, answer ->
-                        run {
-                            viewModel.setNextQuestionId(nextQnId)
-                            viewModel.setQuestionResponse(
-                                currentQnId,
-                                answer
-                            )
-                        }
-                    }, onDone = { currentQnId, answer ->
-                        viewModel.setQuestionResponse(
-                            currentQnId,
-                            answer
+                        SurveyUI(
+                            state.question,
+                            onNext = { nextQnId, currentQnId, answer ->
+                                run {
+                                    viewModel.setNextQuestionId(nextQnId)
+                                    viewModel.setQuestionResponse(
+                                        currentQnId,
+                                        answer
+                                    )
+                                }
+                            }, onDone = { currentQnId, answer ->
+                                viewModel.setQuestionResponse(
+                                    currentQnId,
+                                    answer
+                                )
+                                viewModel.saveSurveyResponse()
+                                onFinish()
+                            }
                         )
-                        viewModel.saveSurveyResponse()
-                        onFinish()
                     }
-                )
+                    else -> CircularProgressIndicator()
+                }
             }
         }
     }

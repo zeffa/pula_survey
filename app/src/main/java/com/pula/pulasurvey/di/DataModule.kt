@@ -9,6 +9,7 @@ import com.pula.pulasurvey.data.local.preferences.QuestionDataStore
 import com.pula.pulasurvey.data.local.preferences.QuestionDataStoreImpl
 import com.pula.pulasurvey.data.mappers.OptionMapper
 import com.pula.pulasurvey.data.mappers.QuestionMapper
+import com.pula.pulasurvey.data.mappers.SurveyResponseMapper
 import com.pula.pulasurvey.data.remote.NetworkHelper
 import com.pula.pulasurvey.data.remote.PulaSurveyApi
 import com.pula.pulasurvey.data.repositories.SurveyRepository
@@ -29,9 +30,16 @@ object DataModule {
         localDataSource: LocalDataSource,
         remoteDataSource: RemoteDataSource,
         questionMapper: QuestionMapper,
-        optionMapper: OptionMapper
+        optionMapper: OptionMapper,
+        responseMapper: SurveyResponseMapper
     ): SurveyRepository {
-        return SurveyRepositoryImpl(localDataSource, remoteDataSource, questionMapper, optionMapper)
+        return SurveyRepositoryImpl(
+            localDataSource,
+            remoteDataSource,
+            questionMapper,
+            optionMapper,
+            responseMapper
+        )
     }
 
     @Singleton

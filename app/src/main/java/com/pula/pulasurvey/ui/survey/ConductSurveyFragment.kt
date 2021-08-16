@@ -23,30 +23,30 @@ class ConductSurveyFragment : Fragment(R.layout.conduct_survey) {
         _binding = ConductSurveyBinding.bind(view)
         viewModel.fetchSurveyQuestions()
 
-        viewModelObservers()
+//        viewModelObservers()
     }
 
-    private fun viewModelObservers() {
-        viewModel.surveyResource.observe(viewLifecycleOwner) { state ->
-            when(state) {
-                is SurveyResource.Loading -> {
-
-                }
-                is SurveyResource.InternetUnavailable -> {
-
-                }
-                is SurveyResource.InternetAvailable -> {
-
-                }
-                is SurveyResource.LoadingSuccess -> {
-                    composeSurveyViews(state.questions)
-                }
-                is SurveyResource.LoadingFailed -> {
-
-                }
-            }
-        }
-    }
+//    private fun viewModelObservers() {
+//        viewModel.surveyResource.observe(viewLifecycleOwner) { state ->
+//            when(state) {
+//                is SurveyResource.Loading -> {
+//
+//                }
+//                is SurveyResource.InternetUnavailable -> {
+//
+//                }
+//                is SurveyResource.InternetAvailable -> {
+//
+//                }
+//                is SurveyResource.LoadingSuccess -> {
+//                    composeSurveyViews(state.questions)
+//                }
+//                is SurveyResource.LoadingFailed -> {
+//
+//                }
+//            }
+//        }
+//    }
 
     private fun composeSurveyViews(questions: List<Question>) {
         TODO("Not yet implemented")

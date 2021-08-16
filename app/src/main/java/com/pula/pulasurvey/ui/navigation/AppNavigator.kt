@@ -26,7 +26,9 @@ fun AppNavigator() {
         }
 
         composable(Screen.Survey.route) {
-            SurveyScreen()
+            SurveyScreen(onFinish = {
+                PulaNavigation.navigateTo(navController, Screen.Welcome.route, false)
+            })
         }
     }
 }

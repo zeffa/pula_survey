@@ -11,6 +11,7 @@ private val DarkColorPalette = darkColors(
     primary = PulaDarkBlue,
     primaryVariant = PulaDarkBlue,
     secondary = PulaGreen,
+    onPrimary = Color.White
 )
 
 private val LightColorPalette = lightColors(
@@ -21,7 +22,7 @@ private val LightColorPalette = lightColors(
     /* Other default colors to override */
     background = PulaBlue,
     surface = Color.White,
-    onPrimary = Color.White,
+    onPrimary = Color.Black,
     onSecondary = Color.Black,
     onBackground = Color.Black,
     onSurface = Color.Black,

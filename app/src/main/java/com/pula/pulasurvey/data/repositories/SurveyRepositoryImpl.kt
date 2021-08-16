@@ -5,11 +5,13 @@ import com.pula.pulasurvey.data.datasource.RemoteDataSource
 import com.pula.pulasurvey.data.local.entities.QuestionAndOptions
 import com.pula.pulasurvey.data.mappers.OptionMapper
 import com.pula.pulasurvey.data.mappers.QuestionMapper
+import com.pula.pulasurvey.data.mappers.SurveyResponseMapper
 import com.pula.pulasurvey.data.remote.NetworkResult
 import com.pula.pulasurvey.data.remote.dto.OptionDTO
 import com.pula.pulasurvey.data.remote.dto.QuestionDTO
 import com.pula.pulasurvey.data.remote.dto.StringDataDTO
 import com.pula.pulasurvey.data.remote.dto.SurveyDTO
+import com.pula.pulasurvey.ui.models.CompletedSurvey
 import com.pula.pulasurvey.ui.models.Question
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +21,8 @@ class SurveyRepositoryImpl(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
     private val questionMapper: QuestionMapper,
-    private val optionMapper: OptionMapper
+    private val optionMapper: OptionMapper,
+    private val responseMapper: SurveyResponseMapper
 ) : SurveyRepository {
     override suspend fun fetchSurveyFromRemote(): NetworkResult<SurveyDTO> {
         return remoteDataSource.fetchSurveyFromApi()
@@ -71,6 +74,13 @@ class SurveyRepositoryImpl(
             }
         }
         return questionsList
+    }
+
+    override suspend fun saveSurveyResponse(answersList: MutableList<CompletedSurvey>): List<Long> {
+        val responseEntities = answersList.map {
+            responseMapper.fromModelToEntity(it)!!
+        }
+        return localDataSource.insertSurveyResponseToDb(responseEntities)
     }
 
     private fun mapToQuestion(

@@ -11,6 +11,7 @@ sealed class SurveyState {
 }
 
 sealed class SurveyResource {
+    object Initial : SurveyResource()
     object Loading : SurveyResource()
     object InternetUnavailable : SurveyResource()
     object InternetAvailable : SurveyResource()

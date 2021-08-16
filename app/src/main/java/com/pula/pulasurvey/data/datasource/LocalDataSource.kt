@@ -1,6 +1,7 @@
 package com.pula.pulasurvey.data.datasource
 
 import com.pula.pulasurvey.data.local.PulaSurveyDatabase
+import com.pula.pulasurvey.data.local.entities.CompletedSurveyEntity
 import com.pula.pulasurvey.data.local.entities.OptionEntity
 import com.pula.pulasurvey.data.local.entities.QuestionAndOptions
 import com.pula.pulasurvey.data.local.entities.QuestionEntity
@@ -19,6 +20,7 @@ interface LocalDataSource {
     suspend fun getStartQuestion(): String
     suspend fun checkIfSurveySavedInDb(): Boolean
     suspend fun fetchQuestionsAndOptionFromDb(): Flow<List<QuestionAndOptions>>
+    suspend fun insertSurveyResponseToDb(responseEntities: List<CompletedSurveyEntity>): List<Long>
     suspend fun commit(
         startQn: String,
         questions: List<QuestionEntity>,
@@ -60,5 +62,9 @@ class LocalDataSourceImpl(
 
     override suspend fun fetchQuestionsAndOptionFromDb(): Flow<List<QuestionAndOptions>> {
         return database.questionDao().getQuestionsAndOptionFromDb()
+    }
+
+    override suspend fun insertSurveyResponseToDb(responseEntities: List<CompletedSurveyEntity>) : List<Long> {
+        return database.completedSurveyDao().insert(responseEntities)
     }
 }

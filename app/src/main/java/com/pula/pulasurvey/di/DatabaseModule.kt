@@ -3,6 +3,7 @@ package com.pula.pulasurvey.di
 import android.content.Context
 import androidx.room.Room
 import com.pula.pulasurvey.data.local.PulaSurveyDatabase
+import com.pula.pulasurvey.data.local.dao.CompletedSurveyDao
 import com.pula.pulasurvey.data.local.dao.OptionDao
 import com.pula.pulasurvey.data.local.dao.QuestionDao
 import dagger.Module
@@ -31,4 +32,8 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideOptionDao(database: PulaSurveyDatabase): OptionDao = database.optionDao()
+
+    @Singleton
+    @Provides
+    fun provideCompletedSurveyDao(database: PulaSurveyDatabase): CompletedSurveyDao = database.completedSurveyDao()
 }

@@ -2,14 +2,16 @@ package com.pula.pulasurvey.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.pula.pulasurvey.data.local.dao.CompletedSurveyDao
 import com.pula.pulasurvey.data.local.dao.OptionDao
 import com.pula.pulasurvey.data.local.dao.QuestionDao
+import com.pula.pulasurvey.data.local.entities.CompletedSurveyEntity
 import com.pula.pulasurvey.data.local.entities.OptionEntity
 import com.pula.pulasurvey.data.local.entities.QuestionEntity
 
 @Database(
     version = PulaSurveyDatabase.DATABASE_VERSION,
-    entities = [QuestionEntity::class, OptionEntity::class]
+    entities = [QuestionEntity::class, OptionEntity::class, CompletedSurveyEntity::class]
 )
 abstract class PulaSurveyDatabase : RoomDatabase() {
     companion object {
@@ -19,4 +21,5 @@ abstract class PulaSurveyDatabase : RoomDatabase() {
 
     abstract fun questionDao(): QuestionDao
     abstract fun optionDao(): OptionDao
+    abstract fun completedSurveyDao(): CompletedSurveyDao
 }

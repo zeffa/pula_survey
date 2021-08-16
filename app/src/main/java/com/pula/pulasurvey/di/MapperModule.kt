@@ -1,9 +1,6 @@
 package com.pula.pulasurvey.di
 
-import com.pula.pulasurvey.data.mappers.OptionMapper
-import com.pula.pulasurvey.data.mappers.OptionMapperImpl
-import com.pula.pulasurvey.data.mappers.QuestionMapper
-import com.pula.pulasurvey.data.mappers.QuestionMapperImpl
+import com.pula.pulasurvey.data.mappers.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,4 +18,9 @@ object MapperModule {
     @Singleton
     @Provides
     fun provideOptionMapper(): OptionMapper = OptionMapperImpl()
+
+
+    @Singleton
+    @Provides
+    fun provideSurveyResponseMapper(): SurveyResponseMapper = SurveyResponseMapperImpl()
 }

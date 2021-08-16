@@ -27,16 +27,13 @@ class SurveyViewModel @Inject constructor(
 ) : ViewModel() {
     private var answersList = mutableListOf<CompletedSurvey>()
 
-    private var _surveyResource: MutableLiveData<SurveyResource> = MutableLiveData()
     private var _surveyQuestions: MutableLiveData<List<Question>> = MutableLiveData()
-    val surveyResource: LiveData<SurveyResource> get() = _surveyResource
 
+    private var _surveyResource: MutableLiveData<SurveyResource> = MutableLiveData()
     private var _currentQuestion: MutableLiveData<Question> = MutableLiveData()
-    val currentQuestionActive: LiveData<Question> get() = _currentQuestion
 
-    init {
-        fetchSurveyQuestions()
-    }
+    val surveyResource: LiveData<SurveyResource> get() = _surveyResource
+    val currentQuestionActive: LiveData<Question> get() = _currentQuestion
 
     private fun fetchSurveyFromApi() {
         viewModelScope.launch {
@@ -50,6 +47,7 @@ class SurveyViewModel @Inject constructor(
         viewModelScope.launch {
             when (val response = surveyRepository.fetchSurveyFromRemote()) {
                 is NetworkResult.Success -> {
+                    surveyRepository.saveStartQuestionId(response.value.startQuestionId)
                     if (!surveyRepository.isSurveySavedLocally()) {
                         surveyRepository.saveSurvey(response.value)
                     }
@@ -103,9 +101,19 @@ class SurveyViewModel @Inject constructor(
             val questions = surveyRepository.formatToQuestionDomain(questionOptions)
             _surveyResource.value = SurveyResource.LoadingSuccess(questions)
             _surveyQuestions.value = questions
-            _currentQuestion.value = questions.find {
-                it.questionId == getStartQuestionId()
-            }
+            setQuestionsLiveData(questions)
+        }
+    }
+
+    private fun setQuestionsLiveData(questions: List<Question>) {
+        _currentQuestion.value = questions.find {
+            it.questionId == getStartQuestionId()
+        }
+    }
+
+    fun getCurrentQuestion(questions: List<Question>): Question? {
+        return questions.find {
+            it.questionId == getStartQuestionId()
         }
     }
 

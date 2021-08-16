@@ -14,11 +14,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 interface LocalDataSource {
-    suspend fun getPendingResponsesFromDb():List<CompletedSurveyEntity>
+    suspend fun getPendingResponsesFromDb(): List<CompletedSurveyEntity>
     suspend fun getStartQuestion(): String
     suspend fun checkIfSurveySavedInDb(): Boolean
     suspend fun fetchQuestionsAndOptionFromDb(): Flow<List<QuestionAndOptions>>
     suspend fun insertSurveyResponseToDb(responseEntities: List<CompletedSurveyEntity>): List<Long>
+    suspend fun saveStartQuestionId(startQnId: String)
     suspend fun clearResponses()
     suspend fun commit(
         startQn: String,
@@ -46,9 +47,9 @@ class LocalDataSourceImpl(
         options: List<OptionEntity>
     ) {
         CoroutineScope(Dispatchers.IO).launch {
+            async { dataStore.setStartQuestion(startQn) }
             async { database.optionDao().insert(options) }
             async { database.questionDao().insert(questions) }
-            dataStore.setStartQuestion(startQn)
         }
     }
 
@@ -62,6 +63,10 @@ class LocalDataSourceImpl(
 
     override suspend fun insertSurveyResponseToDb(responseEntities: List<CompletedSurveyEntity>): List<Long> {
         return database.completedSurveyDao().insert(responseEntities)
+    }
+
+    override suspend fun saveStartQuestionId(startQnId: String) {
+        dataStore.setStartQuestion(startQnId)
     }
 
     override suspend fun clearResponses() {

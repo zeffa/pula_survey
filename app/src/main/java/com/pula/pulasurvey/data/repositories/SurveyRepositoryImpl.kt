@@ -91,6 +91,10 @@ class SurveyRepositoryImpl(
         localDataSource.clearResponses()
     }
 
+    override suspend fun saveStartQuestionId(startQnId: String) {
+        localDataSource.saveStartQuestionId(startQnId)
+    }
+
     private fun mapQuestionText(currentDTO: QuestionDTO, stringDataDTO: StringDataDTO): String {
         val stringsMap = stringDataDTO.convertToMap()
         return stringsMap[currentDTO.questionText].toString()

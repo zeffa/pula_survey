@@ -1,7 +1,6 @@
 package com.pula.pulasurvey.data.local.dao
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.asLiveData
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
@@ -9,8 +8,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.pula.pulasurvey.data.local.PulaSurveyDatabase
 import com.pula.pulasurvey.data.local.entities.CompletedSurveyEntity
-import com.pula.pulasurvey.data.local.entities.QuestionEntity
-import com.pula.pulasurvey.utils.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After

@@ -5,10 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.pula.pulasurvey.data.local.entities.CompletedSurveyEntity
-import com.pula.pulasurvey.data.local.entities.QuestionAndOptions
-import com.pula.pulasurvey.data.local.entities.QuestionEntity
-import com.pula.pulasurvey.ui.models.CompletedSurvey
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CompletedSurveyDao {

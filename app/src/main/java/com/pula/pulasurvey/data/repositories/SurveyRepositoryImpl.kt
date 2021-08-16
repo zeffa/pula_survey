@@ -7,7 +7,10 @@ import com.pula.pulasurvey.data.mappers.OptionMapper
 import com.pula.pulasurvey.data.mappers.QuestionMapper
 import com.pula.pulasurvey.data.mappers.SurveyResponseMapper
 import com.pula.pulasurvey.data.remote.NetworkResult
-import com.pula.pulasurvey.data.remote.dto.*
+import com.pula.pulasurvey.data.remote.dto.OptionDTO
+import com.pula.pulasurvey.data.remote.dto.QuestionDTO
+import com.pula.pulasurvey.data.remote.dto.StringDataDTO
+import com.pula.pulasurvey.data.remote.dto.SurveyDTO
 import com.pula.pulasurvey.ui.models.CompletedSurvey
 import com.pula.pulasurvey.ui.models.Question
 import kotlinx.coroutines.Dispatchers

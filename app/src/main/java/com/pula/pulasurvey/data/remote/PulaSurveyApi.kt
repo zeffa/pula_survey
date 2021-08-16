@@ -6,8 +6,8 @@ import retrofit2.http.GET
 
 interface PulaSurveyApi {
     @GET(value = "d628facc-ec18-431d-a8fc-9c096e00709a")
-    suspend fun getSurvey() : SurveyDTO
+    suspend fun getSurvey(): SurveyDTO
 
     @GET(value = "dummy_endpoint")
-    suspend fun sendSurvey() : SurveyResponse
+    suspend fun sendSurvey(): SurveyResponse
 }

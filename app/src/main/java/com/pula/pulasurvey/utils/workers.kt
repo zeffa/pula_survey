@@ -9,20 +9,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SendSurveyResponseToServer @Inject constructor(private val repository: SurveyRepository, appContext: Context, workerParams: WorkerParameters) :
+class SendSurveyResponseToServer @Inject constructor(
+    private val repository: SurveyRepository,
+    appContext: Context,
+    workerParams: WorkerParameters
+) :
     Worker(appContext, workerParams) {
     override fun doWork(): Result {
         return try {
             sendSurveyToServer(repository)
             Result.success()
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             Result.Retry.failure()
         }
     }
 
     private fun sendSurveyToServer(repository: SurveyRepository) {
         CoroutineScope(Dispatchers.IO).launch {
-           val response = repository.sendResponseToServer()
+            repository.sendResponseToServer()
         }
     }
 }

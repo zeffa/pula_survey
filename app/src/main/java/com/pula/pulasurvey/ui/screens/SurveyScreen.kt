@@ -1,5 +1,6 @@
 package com.pula.pulasurvey.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -48,12 +49,14 @@ fun SurveyScreen(
             viewModel.surveyResource.observeAsState(initial = SurveyResource.Loading).value.let { state ->
                 when (state) {
                     is SurveyResource.Loading -> {
+                        Log.d("UI_STATE_UPDATE", "Loading State")
                         viewModel.fetchSurveyQuestions()
                     }
                     is SurveyResource.LoadingFailed -> {
                         Text(text = state.error)
                     }
                     is SurveyResource.LoadingSuccess -> {
+                        Log.d("UI_STATE_UPDATE", "Success State")
                         SurveyUI(
                             currentQuestion.value,
                             onNext = { nextQnId, currentQnId, answer ->

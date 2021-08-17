@@ -99,6 +99,7 @@ dependencies {
     //Worker manager
     implementation("androidx.work:work-runtime-ktx:$worker_version")
     implementation("androidx.hilt:hilt-work:1.0.0")
+    kapt 'androidx.hilt:hilt-compiler:1.0.0'
 
     //Db inspection
     implementation "com.facebook.stetho:stetho:1.6.0"

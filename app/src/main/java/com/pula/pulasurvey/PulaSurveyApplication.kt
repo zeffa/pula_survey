@@ -14,7 +14,7 @@ open class PulaSurveyApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        Stetho.initializeWithDefaults(this)
+        if (BuildConfig.DEBUG) Stetho.initializeWithDefaults(this)
     }
 
     override fun getWorkManagerConfiguration(): Configuration {

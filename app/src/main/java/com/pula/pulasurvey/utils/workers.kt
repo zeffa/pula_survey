@@ -7,9 +7,6 @@ import androidx.work.WorkerParameters
 import com.pula.pulasurvey.data.repositories.SurveyRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @HiltWorker
 class SendSurveyResponseToServer @AssistedInject constructor(
@@ -26,9 +23,7 @@ class SendSurveyResponseToServer @AssistedInject constructor(
         }
     }
 
-    private fun sendSurveyToServer(repository: SurveyRepository) {
-        CoroutineScope(Dispatchers.IO).launch {
-            repository.sendResponseToServer()
-        }
+    private suspend fun sendSurveyToServer(repository: SurveyRepository) {
+        repository.sendResponseToServer()
     }
 }

@@ -64,16 +64,11 @@ class SurveyRepositoryImpl(
     }
 
     override suspend fun formatToQuestionDomain(questions: List<QuestionAndOptions>): List<Question> {
-        val questionsList = mutableListOf<Question>()
-        questions.forEach { quizOptions ->
-            val question = questionMapper.fromEntityToModel(quizOptions.question).also {
-                it?.options = optionMapper.entityListToDomainModelList(quizOptions.options)
-            }
-            if (question != null) {
-                questionsList.add(question)
+        return questions.map { quizAndOptions ->
+            questionMapper.fromEntityToModel(quizAndOptions.question)!!.apply {
+                options = optionMapper.entityListToDomainModelList(quizAndOptions.options)
             }
         }
-        return questionsList
     }
 
     override suspend fun saveSurveyResponse(answersList: MutableList<CompletedSurvey>): List<Long> {
